@@ -20,7 +20,7 @@ CommandResult handle(
     }
     if(cmd == "stats"){
         std::ostringstream ss;
-        ss << "total = " << stats.total_uniq_clients
+        ss << "total = " << stats.total_clients
             << "\ncurrent = " << stats.curr_clients
             << "\n";
         

@@ -6,11 +6,18 @@
 #include <iostream>
 
 Server::Server(const std::string& ip, uint16_t port, bool useUDP) : 
-                                                                    _ip(ip), _port(port), _useUdp(useUDP), _tcpFd(nullptr), 
-                                                                    _udpFd(nullptr), _epoll(1024), _running(false) {}
+                                                                    _ip(ip), _port(port), _tcpFd(nullptr), _udpFd(nullptr), 
+                                                                    _useUdp(useUDP), _epoll(1024), _running(false) {}
 
 Server::~Server(){
     stop();
+
+    for(auto& [fd, sock] : _clientSocks){
+        if(sock) close(sock->getFd());
+        delete sock;
+    }
+    _clientSocks.clear();
+
     if(_tcpFd) { close(_tcpFd->getFd()); delete _tcpFd; _tcpFd = nullptr; }
     if(_udpFd) { close(_udpFd->getFd()); delete _udpFd; _udpFd = nullptr; }
 }
@@ -23,6 +30,24 @@ bool Server::start(){
 
 bool Server::stop(){
     _running = false;
+
+    for(int fd : _clients){ 
+        _epoll.remove(fd);
+
+        auto it = _clientSocks.find(fd);
+        if(it != _clientSocks.end()){
+            if(it->second) close(it->second->getFd());
+            delete it->second;
+            _clientSocks.erase(it);
+        }
+    }
+
+    if(!_clientSocks.empty()) _clientSocks.clear();
+    if(!_clients.empty()) _clients.clear();
+
+    if(_tcpFd) _epoll.remove(_tcpFd->getFd());
+    if(_udpFd) _epoll.remove(_udpFd->getFd());
+
     return true;
 }
 
@@ -96,6 +121,9 @@ void Server::handleNewConnection(int, uint32_t){
 
     configNonBlocking(clientFd);
 
+    _clientSocks[clientFd] = client;
+    _clients.insert(clientFd);
+
     _epoll.add(clientFd, EPOLLIN, [this](int fd, uint32_t ev){
         handleClientData(fd, ev);
     });
@@ -104,9 +132,8 @@ void Server::handleNewConnection(int, uint32_t){
         sockaddr_in addr{};
         socklen_t len = sizeof(addr);
         getpeername(clientFd, (sockaddr*)&addr, &len);
-        _clients.insert(clientFd);
         _stats.curr_clients++;
-        _stats.total_uniq_clients++;
+        _stats.total_clients++;
         _oCC(clientFd, addr);
     }
 }
@@ -123,7 +150,7 @@ void Server::handleClientData(int fd, uint32_t){
             _oDR(fd, buff, n);
         }
         
-        -_udpFd->ssend(buff, n, ip, port);
+        if(n > 0) _udpFd->ssend(buff, n, ip, port);
 
         return;
     }
@@ -132,6 +159,13 @@ void Server::handleClientData(int fd, uint32_t){
         _epoll.remove(fd);
         if(_oCD) _oCD(fd);
         _clients.erase(fd);
+
+        auto itc = _clientSocks.find(fd);
+        if(itc != _clientSocks.end()){
+            delete itc->second;
+            _clientSocks.erase(itc);
+        }
+
         _stats.curr_clients--;
         close(fd);
         return;

@@ -24,7 +24,7 @@ int main(){
     server.setOnClientConnected([](int fd, const sockaddr_in& addr){
         char ip[INET_ADDRSTRLEN];
         inet_ntop(AF_INET, &addr.sin_addr, ip, sizeof(ip));
-        std::cout << "Client connected:\n" << ip << ":" << htons(addr.sin_port) << "\n(fd=" << fd << ")\n";
+        std::cout << "Client connected:\n" << ip << ":" << ntohs(addr.sin_port) << "\n(fd=" << fd << ")\n";
     });
 
     server.setOnDataReceived([&server](int fd, const void* data, size_t size){

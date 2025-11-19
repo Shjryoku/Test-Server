@@ -38,7 +38,7 @@ bool TCPSock::sbind(const std::string& ip, uint16_t port){
     int opt = 1;
     if(setsockopt(_sockfd, SOL_SOCKET, SO_REUSEADDR, &opt, sizeof(opt)) < 0){
         perror("setsockopt");
-        return -1;
+        return false;
     }
     
     return bind(_sockfd, (sockaddr*)&addr, sizeof(addr)) == 0;
@@ -105,7 +105,7 @@ ssize_t UDPSock::ssend(const void* data, size_t size, const std::string& ip, uin
 
     if(inet_pton(AF_INET, ip.c_str(), &addr.sin_addr) <= 0){
         perror("inet_pton");
-        return false;
+        return -1;
     }
 
     return sendto(_sockfd, data, size, 0, (sockaddr*)&addr, sizeof(addr));

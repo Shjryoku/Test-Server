@@ -43,6 +43,7 @@ bool Epoll::remove(int fd){
         return false;
     }
 
+    _callbacks.erase(fd);
     return true;
 }
 

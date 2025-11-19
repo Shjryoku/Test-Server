@@ -4,7 +4,7 @@
 
 struct ServerStats
 {
-    size_t total_uniq_clients = 0;
+    size_t total_clients = 0;
     size_t curr_clients = 0;
 };
 

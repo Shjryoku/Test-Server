@@ -2,6 +2,7 @@
 #include "socket.h"
 #include "epoll.h"
 #include <unordered_set>
+#include <unordered_map>
 #include "commands.h"
 
 class Server{
@@ -46,6 +47,7 @@ private:
     OnDataReceived          _oDR;
 
     std::unordered_set<int> _clients;
+    std::unordered_map<int, Sock*> _clientSocks;
 
     bool        _running;
 
