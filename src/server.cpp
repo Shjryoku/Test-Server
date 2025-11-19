@@ -122,6 +122,9 @@ void Server::handleClientData(int fd, uint32_t){
         if(n > 0 && _oDR){
             _oDR(fd, buff, n);
         }
+        
+        -_udpFd->ssend(buff, n, ip, port);
+
         return;
     }
     ssize_t n = recv(fd, buff, sizeof(buff), 0);
