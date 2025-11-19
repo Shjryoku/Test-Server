@@ -31,6 +31,9 @@ default_target: all
 
 .SUFFIXES: .hpux_make_needs_suffix_list
 
+# Produce verbose output by default.
+VERBOSE = 1
+
 # Command-line flag to silence nested $(MAKE).
 $(VERBOSE)MAKESILENT = -s
 
@@ -60,7 +63,7 @@ EQUALS = =
 CMAKE_SOURCE_DIR = /home/batspine/Projects/TZ
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/batspine/Projects/TZ/build
+CMAKE_BINARY_DIR = /home/batspine/Projects/TZ/obj-x86_64-linux-gnu
 
 #=============================================================================
 # Targets provided globally by CMake.
@@ -87,9 +90,9 @@ rebuild_cache/fast: rebuild_cache
 
 # The main all target
 all: cmake_check_build_system
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/batspine/Projects/TZ/build/CMakeFiles /home/batspine/Projects/TZ/build//CMakeFiles/progress.marks
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/batspine/Projects/TZ/obj-x86_64-linux-gnu/CMakeFiles /home/batspine/Projects/TZ/obj-x86_64-linux-gnu//CMakeFiles/progress.marks
 	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 all
-	$(CMAKE_COMMAND) -E cmake_progress_start /home/batspine/Projects/TZ/build/CMakeFiles 0
+	$(CMAKE_COMMAND) -E cmake_progress_start /home/batspine/Projects/TZ/obj-x86_64-linux-gnu/CMakeFiles 0
 .PHONY : all
 
 # The main clean target

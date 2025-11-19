@@ -1,0 +1,13 @@
+Source: async-server
+Section: net
+Priority: optional
+Maintainer: Shjryoku <shjryoku@gmail.com>
+Build-Depends: debhelper (>= 11)
+Standards-Version: 4.5.0
+
+Package: async-server-shj
+Architecture: any
+Depends: ${shlibs:Depends}, ${misc:Depends}
+Build-Depends: debhelper-compat (= 13)
+Description: Async TCP/UDP server
+    Simple client-server connection that echoes messages and support this commands: "/time", "/stats", "/shutdown"

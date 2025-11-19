@@ -1,2 +1,3 @@
+/home/batspine/Projects/TZ/build/CMakeFiles/server.dir
 /home/batspine/Projects/TZ/build/CMakeFiles/edit_cache.dir
 /home/batspine/Projects/TZ/build/CMakeFiles/rebuild_cache.dir

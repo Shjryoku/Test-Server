@@ -1,0 +1,3 @@
+/home/batspine/Projects/TZ/obj-x86_64-linux-gnu/CMakeFiles/server.dir
+/home/batspine/Projects/TZ/obj-x86_64-linux-gnu/CMakeFiles/edit_cache.dir
+/home/batspine/Projects/TZ/obj-x86_64-linux-gnu/CMakeFiles/rebuild_cache.dir

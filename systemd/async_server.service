@@ -1,0 +1,13 @@
+[Unit]
+Description=Async TCP/UDP Server
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/local/bin/async_server
+Restart=on-failure
+User=asyncserver
+Group=asyncserver
+
+[Install]
+WantedBy=multi-user.target
